@@ -3,9 +3,9 @@
 import json
 from time import time
 
-from ultralytics.hub.utils import PREFIX, traces
-from ultralytics.yolo.utils import LOGGER
-from ultralytics.yolo.utils.torch_utils import get_flops, get_num_params
+from ....hub.utils import PREFIX, traces
+from ....yolo.utils import LOGGER
+from ....yolo.utils.torch_utils import get_flops, get_num_params
 
 
 def on_pretrain_routine_end(trainer):

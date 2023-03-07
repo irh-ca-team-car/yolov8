@@ -5,17 +5,17 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ultralytics.nn.tasks import DetectionModel
-from ultralytics.yolo import v8
-from ultralytics.yolo.data import build_dataloader
-from ultralytics.yolo.data.dataloaders.v5loader import create_dataloader
-from ultralytics.yolo.engine.trainer import BaseTrainer
-from ultralytics.yolo.utils import DEFAULT_CFG, RANK, colorstr
-from ultralytics.yolo.utils.loss import BboxLoss
-from ultralytics.yolo.utils.ops import xywh2xyxy
-from ultralytics.yolo.utils.plotting import plot_images, plot_labels, plot_results
-from ultralytics.yolo.utils.tal import TaskAlignedAssigner, dist2bbox, make_anchors
-from ultralytics.yolo.utils.torch_utils import de_parallel
+from ....nn.tasks import DetectionModel
+from ....yolo import v8
+from ....yolo.data import build_dataloader
+from ....yolo.data.dataloaders.v5loader import create_dataloader
+from ....yolo.engine.trainer import BaseTrainer
+from ....yolo.utils import DEFAULT_CFG, RANK, colorstr
+from ....yolo.utils.loss import BboxLoss
+from ....yolo.utils.ops import xywh2xyxy
+from ....yolo.utils.plotting import plot_images, plot_labels, plot_results
+from ....yolo.utils.tal import TaskAlignedAssigner, dist2bbox, make_anchors
+from ....yolo.utils.torch_utils import de_parallel
 
 
 # BaseTrainer python usage
@@ -157,7 +157,7 @@ class Loss:
             # pred_dist = (pred_dist.view(b, a, c // 4, 4).softmax(2) * self.proj.type(pred_dist.dtype).view(1, 1, -1, 1)).sum(2)
         return dist2bbox(pred_dist, anchor_points, xywh=False)
 
-    def __call__(self, preds, batch):
+    def __call__(self, preds, targets):
         loss = torch.zeros(3, device=self.device)  # box, cls, dfl
         feats = preds[1] if isinstance(preds, tuple) else preds
         pred_distri, pred_scores = torch.cat([xi.view(feats[0].shape[0], self.no, -1) for xi in feats], 2).split(
@@ -171,8 +171,9 @@ class Loss:
         imgsz = torch.tensor(feats[0].shape[2:], device=self.device, dtype=dtype) * self.stride[0]  # image size (h,w)
         anchor_points, stride_tensor = make_anchors(feats, self.stride, 0.5)
 
-        # targets
-        targets = torch.cat((batch['batch_idx'].view(-1, 1), batch['cls'].view(-1, 1), batch['bboxes']), 1)
+        # targetsbatch
+        if not isinstance(targets, torch.Tensor):
+            targets = torch.cat((targets['batch_idx'].view(-1, 1), targets['cls'].view(-1, 1), targets['bboxes']), 1)
         targets = self.preprocess(targets.to(self.device), batch_size, scale_tensor=imgsz[[1, 0, 1, 0]])
         gt_labels, gt_bboxes = targets.split((1, 4), 2)  # cls, xyxy
         mask_gt = gt_bboxes.sum(2, keepdim=True).gt_(0)
@@ -210,7 +211,7 @@ def train(cfg=DEFAULT_CFG, use_python=False):
 
     args = dict(model=model, data=data, device=device)
     if use_python:
-        from ultralytics import YOLO
+        from .... import YOLO
         YOLO(model).train(**args)
     else:
         trainer = DetectionTrainer(overrides=args)

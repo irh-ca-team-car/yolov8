@@ -21,7 +21,7 @@ import pandas as pd
 import torch
 import yaml
 
-from ultralytics import __version__
+from ... import __version__
 
 # Constants
 FILE = Path(__file__).resolve()
@@ -564,8 +564,8 @@ def get_settings(file=USER_CONFIG_DIR / 'settings.yaml', version='0.0.2'):
     """
     import hashlib
 
-    from ultralytics.yolo.utils.checks import check_version
-    from ultralytics.yolo.utils.torch_utils import torch_distributed_zero_first
+    from .checks import check_version
+    from .torch_utils import torch_distributed_zero_first
 
     git_dir = get_git_dir()
     root = git_dir or Path()
@@ -610,7 +610,7 @@ def set_settings(kwargs, file=USER_CONFIG_DIR / 'settings.yaml'):
 # Run below code on yolo/utils init ------------------------------------------------------------------------------------
 
 # Set logger
-set_logging(LOGGING_NAME, verbose=VERBOSE)  # run before defining LOGGER
+set_logging(LOGGING_NAME, verbose=False)  # run before defining LOGGER
 LOGGER = logging.getLogger(LOGGING_NAME)  # define globally (used in train.py, val.py, detect.py, etc.)
 if WINDOWS:
     for fn in LOGGER.info, LOGGER.warning:

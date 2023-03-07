@@ -33,14 +33,14 @@ from pathlib import Path
 
 import cv2
 
-from ultralytics.nn.autobackend import AutoBackend
-from ultralytics.yolo.cfg import get_cfg
-from ultralytics.yolo.data import load_inference_source
-from ultralytics.yolo.data.augment import classify_transforms
-from ultralytics.yolo.utils import DEFAULT_CFG, LOGGER, SETTINGS, callbacks, colorstr, ops
-from ultralytics.yolo.utils.checks import check_imgsz, check_imshow
-from ultralytics.yolo.utils.files import increment_path
-from ultralytics.yolo.utils.torch_utils import select_device, smart_inference_mode
+from ...nn.autobackend import AutoBackend
+from ..cfg import get_cfg
+from ..data import load_inference_source
+from ..data.augment import classify_transforms
+from ..utils import DEFAULT_CFG, LOGGER, SETTINGS, callbacks, colorstr, ops
+from ..utils.checks import check_imgsz, check_imshow
+from ..utils.files import increment_path
+from ..utils.torch_utils import select_device, smart_inference_mode
 
 
 class BasePredictor:

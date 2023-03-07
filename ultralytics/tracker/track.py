@@ -2,8 +2,8 @@
 
 import torch
 
-from ultralytics.yolo.utils import IterableSimpleNamespace, yaml_load
-from ultralytics.yolo.utils.checks import check_requirements, check_yaml
+from ..yolo.utils import IterableSimpleNamespace, yaml_load
+from ..yolo.utils.checks import check_requirements, check_yaml
 
 check_requirements('lap')  # for linear_assignment
 

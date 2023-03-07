@@ -16,11 +16,11 @@ import numpy as np
 from PIL import ExifTags, Image, ImageOps
 from tqdm import tqdm
 
-from ultralytics.nn.autobackend import check_class_names
-from ultralytics.yolo.utils import DATASETS_DIR, LOGGER, NUM_THREADS, ROOT, colorstr, emojis, yaml_load
-from ultralytics.yolo.utils.checks import check_file, check_font, is_ascii
-from ultralytics.yolo.utils.downloads import download, safe_download, unzip_file
-from ultralytics.yolo.utils.ops import segments2boxes
+from ...nn.autobackend import check_class_names
+from ...yolo.utils import DATASETS_DIR, LOGGER, NUM_THREADS, ROOT, colorstr, emojis, yaml_load
+from ...yolo.utils.checks import check_file, check_font, is_ascii
+from ...yolo.utils.downloads import download, safe_download, unzip_file
+from ...yolo.utils.ops import segments2boxes
 
 HELP_URL = 'See https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data'
 IMG_FORMATS = 'bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp', 'pfm'  # include image suffixes
@@ -191,7 +191,7 @@ def polygons2masks_overlap(imgsz, segments, downsample_ratio=1):
     return masks, index
 
 
-def check_det_dataset(dataset, autodownload=True):
+def check_det_dataset(dataset, autodownload=False):
     # Download, check and/or unzip dataset if not found locally
     data = check_file(dataset)
 
@@ -369,7 +369,7 @@ class HUBDatasetStats():
     def get_json(self, save=False, verbose=False):
         # Return dataset JSON for Ultralytics HUB
         # from ultralytics.yolo.data import YOLODataset
-        from ultralytics.yolo.data.dataloaders.v5loader import LoadImagesAndLabels
+        from ...yolo.data.dataloaders.v5loader import LoadImagesAndLabels
 
         def _round(labels):
             # Update labels to integer class and 6 decimal place floats
@@ -407,7 +407,7 @@ class HUBDatasetStats():
     def process_images(self):
         # Compress images for Ultralytics HUB
         # from ultralytics.yolo.data import YOLODataset
-        from ultralytics.yolo.data.dataloaders.v5loader import LoadImagesAndLabels
+        from ...yolo.data.dataloaders.v5loader import LoadImagesAndLabels
 
         for split in 'train', 'val', 'test':
             if self.data.get(split) is None:

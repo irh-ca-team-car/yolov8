@@ -6,14 +6,14 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from ultralytics.yolo.data import build_dataloader
-from ultralytics.yolo.data.dataloaders.v5loader import create_dataloader
-from ultralytics.yolo.engine.validator import BaseValidator
-from ultralytics.yolo.utils import DEFAULT_CFG, LOGGER, colorstr, ops
-from ultralytics.yolo.utils.checks import check_requirements
-from ultralytics.yolo.utils.metrics import ConfusionMatrix, DetMetrics, box_iou
-from ultralytics.yolo.utils.plotting import output_to_target, plot_images
-from ultralytics.yolo.utils.torch_utils import de_parallel
+from ....yolo.data import build_dataloader
+from ....yolo.data.dataloaders.v5loader import create_dataloader
+from ....yolo.engine.validator import BaseValidator
+from ....yolo.utils import DEFAULT_CFG, LOGGER, colorstr, ops
+from ....yolo.utils.checks import check_requirements
+from ....yolo.utils.metrics import ConfusionMatrix, DetMetrics, box_iou
+from ....yolo.utils.plotting import output_to_target, plot_images
+from ....yolo.utils.torch_utils import de_parallel
 
 
 class DetectionValidator(BaseValidator):
@@ -240,7 +240,7 @@ def val(cfg=DEFAULT_CFG, use_python=False):
 
     args = dict(model=model, data=data)
     if use_python:
-        from ultralytics import YOLO
+        from .... import YOLO
         YOLO(model).val(**args)
     else:
         validator = DetectionValidator(args=args)

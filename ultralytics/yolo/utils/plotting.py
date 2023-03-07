@@ -14,7 +14,7 @@ import torch
 from PIL import Image, ImageDraw, ImageFont
 from PIL import __version__ as pil_version
 
-from ultralytics.yolo.utils import LOGGER, TryExcept, threaded
+from . import LOGGER, TryExcept, threaded
 
 from .checks import check_font, check_version, is_ascii
 from .files import increment_path

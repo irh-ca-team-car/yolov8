@@ -12,7 +12,7 @@ import requests
 import torch
 from tqdm import tqdm
 
-from ultralytics.yolo.utils import LOGGER, checks, is_online
+from . import LOGGER, checks, is_online
 
 GITHUB_ASSET_NAMES = [f'yolov8{size}{suffix}.pt' for size in 'nsmlx' for suffix in ('', '6', '-cls', '-seg')] + \
                      [f'yolov5{size}u.pt' for size in 'nsmlx'] + \
@@ -94,7 +94,7 @@ def safe_download(url,
                     if method == 'torch':
                         torch.hub.download_url_to_file(url, f, progress=progress)
                     else:
-                        from ultralytics.yolo.utils import TQDM_BAR_FORMAT
+                        from ....yolo.utils import TQDM_BAR_FORMAT
                         with request.urlopen(url) as response, tqdm(total=int(response.getheader('Content-Length', 0)),
                                                                     desc=desc,
                                                                     disable=not progress,
@@ -134,7 +134,7 @@ def safe_download(url,
 
 def attempt_download_asset(file, repo='ultralytics/assets', release='v0.0.0'):
     # Attempt file download from GitHub release assets if not found locally. release = 'latest', 'v6.2', etc.
-    from ultralytics.yolo.utils import SETTINGS  # scoped for circular import
+    from ...yolo.utils import SETTINGS  # scoped for circular import
 
     def github_assets(repository, version='latest'):
         # Return GitHub repo tag and assets (i.e. ['yolov8n.pt', 'yolov8s.pt', ...])

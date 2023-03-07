@@ -20,7 +20,7 @@ import requests
 import torch
 from matplotlib import font_manager
 
-from ultralytics.yolo.utils import (AUTOINSTALL, LOGGER, ROOT, USER_CONFIG_DIR, TryExcept, colorstr, downloads, emojis,
+from . import (AUTOINSTALL, LOGGER, ROOT, USER_CONFIG_DIR, TryExcept, colorstr, downloads, emojis,
                                     is_colab, is_docker, is_jupyter, is_online)
 
 
@@ -135,7 +135,7 @@ def check_latest_pypi_version(package_name='ultralytics'):
 
 
 def check_pip_update():
-    from ultralytics import __version__
+    from ... import __version__
     latest = check_latest_pypi_version()
     if pkg.parse_version(__version__) < pkg.parse_version(latest):
         LOGGER.info(f'New https://pypi.org/project/ultralytics/{latest} available 😃 '
@@ -296,7 +296,7 @@ def check_imshow(warn=False):
 
 
 def check_yolo(verbose=True, device=''):
-    from ultralytics.yolo.utils.torch_utils import select_device
+    from ....yolo.utils.torch_utils import select_device
 
     if is_colab():
         shutil.rmtree('sample_data', ignore_errors=True)  # remove colab /sample_data directory

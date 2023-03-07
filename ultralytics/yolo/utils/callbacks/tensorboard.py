@@ -1,5 +1,5 @@
 # Ultralytics YOLO 🚀, GPL-3.0 license
-from ultralytics.yolo.utils import LOGGER, TESTS_RUNNING
+from ....yolo.utils import LOGGER, TESTS_RUNNING
 
 try:
     from torch.utils.tensorboard import SummaryWriter

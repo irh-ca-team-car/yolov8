@@ -8,10 +8,10 @@ import thop
 import torch
 import torch.nn as nn
 
-from ultralytics.nn.modules import *  # noqa: F403
-from ultralytics.yolo.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, RANK, colorstr, emojis, yaml_load
-from ultralytics.yolo.utils.checks import check_requirements, check_yaml
-from ultralytics.yolo.utils.torch_utils import (fuse_conv_and_bn, fuse_deconv_and_bn, initialize_weights,
+from ..nn.modules import *  # noqa: F403
+from ..yolo.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, RANK, colorstr, emojis, yaml_load
+from ..yolo.utils.checks import check_requirements, check_yaml
+from ..yolo.utils.torch_utils import (fuse_conv_and_bn, fuse_deconv_and_bn, initialize_weights,
                                                 intersect_dicts, make_divisible, model_info, scale_img, time_sync)
 
 
@@ -263,7 +263,7 @@ class ClassificationModel(BaseModel):
 
     def _from_detection_model(self, model, nc=1000, cutoff=10):
         # Create a YOLOv5 classification model from a YOLOv5 detection model
-        from ultralytics.nn.autobackend import AutoBackend
+        from ..nn.autobackend import AutoBackend
         if isinstance(model, AutoBackend):
             model = model.model  # unwrap DetectMultiBackend
         model.model = model.model[:cutoff]  # backbone
@@ -334,7 +334,7 @@ def torch_safe_load(weight):
     Returns:
         The loaded PyTorch model.
     """
-    from ultralytics.yolo.utils.downloads import attempt_download_asset
+    from ..yolo.utils.downloads import attempt_download_asset
 
     file = attempt_download_asset(weight)  # search online if missing locally
     try:

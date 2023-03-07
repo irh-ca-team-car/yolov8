@@ -9,7 +9,7 @@ import torch
 import torch.nn.functional as F
 import torchvision
 
-from ultralytics.yolo.utils import LOGGER
+from . import LOGGER
 
 from .metrics import box_iou
 

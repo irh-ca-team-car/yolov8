@@ -14,10 +14,11 @@ import torch
 import torch.nn as nn
 from PIL import Image
 
-from ultralytics.yolo.utils import LOGGER, ROOT, yaml_load
-from ultralytics.yolo.utils.checks import check_requirements, check_suffix, check_version, check_yaml
-from ultralytics.yolo.utils.downloads import attempt_download_asset, is_url
-from ultralytics.yolo.utils.ops import xywh2xyxy
+
+from ..yolo.utils import LOGGER, ROOT, yaml_load
+from ..yolo.utils.checks import check_requirements, check_suffix, check_version, check_yaml
+from ..yolo.utils.downloads import attempt_download_asset, is_url
+from ..yolo.utils.ops import xywh2xyxy
 
 
 def check_class_names(names):
@@ -97,7 +98,7 @@ class AutoBackend(nn.Module):
             self.model = model  # explicitly assign for to(), cpu(), cuda(), half()
             pt = True
         elif pt:  # PyTorch
-            from ultralytics.nn.tasks import attempt_load_weights
+            from ..nn.tasks import attempt_load_weights
             model = attempt_load_weights(weights if isinstance(weights, list) else w,
                                          device=device,
                                          inplace=True,
@@ -190,7 +191,7 @@ class AutoBackend(nn.Module):
             LOGGER.info(f'Loading {w} for TensorFlow GraphDef inference...')
             import tensorflow as tf
 
-            from ultralytics.yolo.engine.exporter import gd_outputs
+            from ..yolo.engine.exporter import gd_outputs
 
             def wrap_frozen_graph(gd, inputs, outputs):
                 x = tf.compat.v1.wrap_function(lambda: tf.compat.v1.import_graph_def(gd, name=''), [])  # wrapped
@@ -251,7 +252,7 @@ class AutoBackend(nn.Module):
             nhwc = model.runtime.startswith("tensorflow")
             '''
         else:
-            from ultralytics.yolo.engine.exporter import EXPORT_FORMATS_TABLE
+            from ..yolo.engine.exporter import EXPORT_FORMATS_TABLE
             raise TypeError(f"model='{w}' is not a supported model format. "
                             'See https://docs.ultralytics.com/tasks/detection/#export for help.'
                             f'\n\n{EXPORT_FORMATS_TABLE}')
@@ -323,7 +324,7 @@ class AutoBackend(nn.Module):
         elif self.coreml:  # CoreML
             im = im[0].cpu().numpy()
             if self.task == 'classify':
-                from ultralytics.yolo.data.utils import IMAGENET_MEAN, IMAGENET_STD
+                from ..yolo.data.utils import IMAGENET_MEAN, IMAGENET_STD
 
                 # im_pil = Image.fromarray(((im / 6 + 0.5) * 255).astype('uint8'))
                 for i in range(3):
@@ -433,7 +434,7 @@ class AutoBackend(nn.Module):
         """
         # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
         # types = [pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle]
-        from ultralytics.yolo.engine.exporter import export_formats
+        from ..yolo.engine.exporter import export_formats
         sf = list(export_formats().Suffix)  # export suffixes
         if not is_url(p, check=False) and not isinstance(p, str):
             check_suffix(p, sf)  # checks

@@ -2,10 +2,10 @@
 
 import torch
 
-from ultralytics.yolo.engine.predictor import BasePredictor
-from ultralytics.yolo.engine.results import Results
-from ultralytics.yolo.utils import DEFAULT_CFG, ROOT, ops
-from ultralytics.yolo.utils.plotting import Annotator, colors, save_one_box
+from ....yolo.engine.predictor import BasePredictor
+from ....yolo.engine.results import Results
+from ....yolo.utils import DEFAULT_CFG, ROOT, ops
+from ....yolo.utils.plotting import Annotator, colors, save_one_box
 
 
 class DetectionPredictor(BasePredictor):
@@ -90,7 +90,7 @@ def predict(cfg=DEFAULT_CFG, use_python=False):
 
     args = dict(model=model, source=source)
     if use_python:
-        from ultralytics import YOLO
+        from .... import YOLO
         YOLO(model)(**args)
     else:
         predictor = DetectionPredictor(overrides=args)

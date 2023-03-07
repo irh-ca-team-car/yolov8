@@ -3,15 +3,15 @@
 import sys
 from pathlib import Path
 
-from ultralytics import yolo  # noqa
-from ultralytics.nn.tasks import (ClassificationModel, DetectionModel, SegmentationModel, attempt_load_one_weight,
+from ... import yolo  # noqa
+from ...nn.tasks import (ClassificationModel, DetectionModel, SegmentationModel, attempt_load_one_weight,
                                   guess_model_task, nn)
-from ultralytics.yolo.cfg import get_cfg
-from ultralytics.yolo.engine.exporter import Exporter
-from ultralytics.yolo.utils import (DEFAULT_CFG, DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, ONLINE, RANK, ROOT,
+from ...yolo.cfg import get_cfg
+from ...yolo.engine.exporter import Exporter
+from ...yolo.utils import (DEFAULT_CFG, DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, ONLINE, RANK, ROOT,
                                     callbacks, is_git_dir, is_pip_package, yaml_load)
-from ultralytics.yolo.utils.checks import check_file, check_imgsz, check_pip_update, check_yaml
-from ultralytics.yolo.utils.downloads import GITHUB_ASSET_STEMS
+from ...yolo.utils.checks import check_file, check_imgsz, check_pip_update, check_yaml
+from ...yolo.utils.downloads import GITHUB_ASSET_STEMS
 from ultralytics.yolo.utils.torch_utils import smart_inference_mode
 
 # Map head to model, trainer, validator, and predictor classes
@@ -76,7 +76,7 @@ class YOLO:
         """
         self._reset_callbacks()
         self.predictor = None  # reuse predictor
-        self.model = None  # model object
+        self.model : DetectionModel = None  # model object
         self.trainer = None  # trainer object
         self.task = None  # task type
         self.ckpt = None  # if loaded from *.pt
@@ -142,6 +142,8 @@ class YOLO:
             self.task = task or guess_model_task(weights)
             self.ckpt_path = weights
         self.overrides['model'] = weights
+
+        
 
     def _check_is_pytorch_model(self):
         """
@@ -221,7 +223,7 @@ class YOLO:
         return self.predictor.predict_cli(source=source) if is_cli else self.predictor(source=source, stream=stream)
 
     def track(self, source=None, stream=False, **kwargs):
-        from ultralytics.tracker import register_tracker
+        from ...tracker import register_tracker
         register_tracker(self)
         # ByteTrack-based method needs low confidence predictions as input
         conf = kwargs.get('conf') or 0.1
@@ -267,7 +269,7 @@ class YOLO:
             **kwargs : Any other args accepted by the validators. To see all args check 'configuration' section in docs
         """
         self._check_is_pytorch_model()
-        from ultralytics.yolo.utils.benchmarks import benchmark
+        from ...yolo.utils.benchmarks import benchmark
         overrides = self.model.args.copy()
         overrides.update(kwargs)
         overrides = {**DEFAULT_CFG_DICT, **overrides}  # fill in missing overrides keys with defaults
@@ -302,6 +304,9 @@ class YOLO:
         self._check_pip_update()
         overrides = self.overrides.copy()
         overrides.update(kwargs)
+        self.task = overrides.get('task') or self.task
+        self.trainer = TASK_MAP[self.task][1](overrides=overrides)
+        return self
         if kwargs.get('cfg'):
             LOGGER.info(f"cfg file passed. Overriding default params with {kwargs['cfg']}.")
             overrides = yaml_load(check_yaml(kwargs['cfg']))
@@ -311,8 +316,7 @@ class YOLO:
         if overrides.get('resume'):
             overrides['resume'] = self.ckpt_path
 
-        self.task = overrides.get('task') or self.task
-        self.trainer = TASK_MAP[self.task][1](overrides=overrides)
+        
         if not overrides.get('resume'):  # manually set model only if not resuming
             self.trainer.model = self.trainer.get_model(weights=self.model if self.ckpt else None, cfg=self.model.yaml)
             self.model = self.trainer.model
@@ -333,6 +337,7 @@ class YOLO:
         """
         self._check_is_pytorch_model()
         self.model.to(device)
+        return self
 
     @property
     def names(self):

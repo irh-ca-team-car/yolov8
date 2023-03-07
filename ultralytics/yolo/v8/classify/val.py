@@ -1,9 +1,9 @@
 # Ultralytics YOLO 🚀, GPL-3.0 license
 
-from ultralytics.yolo.data import build_classification_dataloader
-from ultralytics.yolo.engine.validator import BaseValidator
-from ultralytics.yolo.utils import DEFAULT_CFG, LOGGER
-from ultralytics.yolo.utils.metrics import ClassifyMetrics
+from ....yolo.data import build_classification_dataloader
+from ....yolo.engine.validator import BaseValidator
+from ....yolo.utils import DEFAULT_CFG, LOGGER
+from ....yolo.utils.metrics import ClassifyMetrics
 
 
 class ClassificationValidator(BaseValidator):
@@ -55,7 +55,7 @@ def val(cfg=DEFAULT_CFG, use_python=False):
 
     args = dict(model=model, data=data)
     if use_python:
-        from ultralytics import YOLO
+        from .... import YOLO
         YOLO(model).val(**args)
     else:
         validator = ClassificationValidator(args=args)

@@ -7,11 +7,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from ultralytics.yolo.utils import DEFAULT_CFG, LOGGER, NUM_THREADS, ops
-from ultralytics.yolo.utils.checks import check_requirements
-from ultralytics.yolo.utils.metrics import SegmentMetrics, box_iou, mask_iou
-from ultralytics.yolo.utils.plotting import output_to_target, plot_images
-from ultralytics.yolo.v8.detect import DetectionValidator
+from ....yolo.utils import DEFAULT_CFG, LOGGER, NUM_THREADS, ops
+from ....yolo.utils.checks import check_requirements
+from ....yolo.utils.metrics import SegmentMetrics, box_iou, mask_iou
+from ....yolo.utils.plotting import output_to_target, plot_images
+from ....yolo.v8.detect import DetectionValidator
 
 
 class SegmentationValidator(DetectionValidator):
@@ -238,7 +238,7 @@ def val(cfg=DEFAULT_CFG, use_python=False):
 
     args = dict(model=model, data=data)
     if use_python:
-        from ultralytics import YOLO
+        from .... import YOLO
         YOLO(model).val(**args)
     else:
         validator = SegmentationValidator(args=args)

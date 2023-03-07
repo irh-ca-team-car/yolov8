@@ -13,8 +13,8 @@ import numpy as np
 import torch
 import torchvision.transforms.functional as F
 
-from ultralytics.yolo.utils import LOGGER, ops
-from ultralytics.yolo.utils.plotting import Annotator, colors
+from ..utils import LOGGER, ops
+from ..utils.plotting import Annotator, colors
 
 
 class Results:

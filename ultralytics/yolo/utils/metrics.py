@@ -11,7 +11,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ultralytics.yolo.utils import LOGGER, TryExcept
+from . import LOGGER, TryExcept
 
 
 # boxes

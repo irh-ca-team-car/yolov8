@@ -28,13 +28,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from ultralytics import YOLO
-from ultralytics.yolo.engine.exporter import export_formats
-from ultralytics.yolo.utils import LINUX, LOGGER, ROOT, SETTINGS
-from ultralytics.yolo.utils.checks import check_yolo
-from ultralytics.yolo.utils.downloads import download
-from ultralytics.yolo.utils.files import file_size
-from ultralytics.yolo.utils.torch_utils import select_device
+from ... import YOLO
+from ...yolo.engine.exporter import export_formats
+from ...yolo.utils import LINUX, LOGGER, ROOT, SETTINGS
+from ...yolo.utils.checks import check_yolo
+from ...yolo.utils.downloads import download
+from ...yolo.utils.files import file_size
+from ...yolo.utils.torch_utils import select_device
 
 
 def benchmark(model=Path(SETTINGS['weights_dir']) / 'yolov8n.pt', imgsz=160, half=False, device='cpu', hard_fail=False):
