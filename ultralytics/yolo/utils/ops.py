@@ -48,8 +48,8 @@ class Profile(contextlib.ContextDecorator):
         """
         Get current time.
         """
-        if self.cuda:
-            torch.cuda.synchronize()
+        #if self.cuda:
+        #    torch.cuda.synchronize()
         return time.time()
 
 

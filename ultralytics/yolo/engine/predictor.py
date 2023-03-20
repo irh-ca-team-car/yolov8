@@ -141,7 +141,7 @@ class BasePredictor:
 
         # setup model
         if not self.model:
-            self.setup_model(model)
+            self.setup_model(model,device)
         # setup source every time predict is called
         self.setup_source(source if source is not None else self.args.source)
 

@@ -148,6 +148,7 @@ class AutoBackend(nn.Module):
             check_version(trt.__version__, '7.0.0', hard=True)  # require tensorrt>=7.0.0
             if device.type == 'cpu':
                 device = torch.device('cuda:0')
+                print("Switching to CUDA:0 since TRT only support cuda")
             Binding = namedtuple('Binding', ('name', 'dtype', 'shape', 'data', 'ptr'))
             logger = trt.Logger(trt.Logger.INFO)
             # Read file
