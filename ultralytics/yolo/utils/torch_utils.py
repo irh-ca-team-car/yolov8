@@ -63,6 +63,8 @@ def select_device(device='', batch=0, newline=False, verbose=True):
     # device = None or 'cpu' or 0 or '0' or '0,1,2,3'
     s = f'Ultralytics YOLOv{__version__} 🚀 Python-{platform.python_version()} torch-{torch.__version__} '
     device = str(device).lower()
+    if device =="cuda":
+        device = "cuda:0"
     for remove in 'cuda:', 'none', '(', ')', '[', ']', "'", ' ':
         device = device.replace(remove, '')  # to string, 'cuda:0' -> '0' and '(0, 1)' -> '0,1'
     cpu = device == 'cpu'
