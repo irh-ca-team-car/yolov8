@@ -12,7 +12,7 @@ from ...yolo.utils import (DEFAULT_CFG, DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGG
                                     callbacks, is_git_dir, is_pip_package, yaml_load)
 from ...yolo.utils.checks import check_file, check_imgsz, check_pip_update, check_yaml
 from ...yolo.utils.downloads import GITHUB_ASSET_STEMS
-from ultralytics.yolo.utils.torch_utils import smart_inference_mode
+from ...yolo.utils.torch_utils import smart_inference_mode
 
 # Map head to model, trainer, validator, and predictor classes
 TASK_MAP = {
